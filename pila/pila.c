@@ -81,7 +81,6 @@ void *pila_desapilar(pila_t *pila) {
     if ((pila->cantidad) * 4 <= pila->capacidad) {
         pila_redimensionar(pila, (pila->capacidad) / 2);
     } 
-    void* tope = pila->datos[pila->cantidad];
     pila->cantidad--;
     return pila->datos[pila->cantidad];
 }
