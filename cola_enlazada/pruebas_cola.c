@@ -54,12 +54,13 @@ static void prueba_volumen(void) {
     int i = 0;
     bool ok = true;
     
-	while (i < 5) {
+    while (i < 5) {
         int num = 0;
         ok &= cola_encolar(cola, &num);
         num++;
         i++;
 	}
+
     print_test("se pudieron encolar todos los elementos", ok == true);
 
     ok = true;
@@ -67,6 +68,7 @@ static void prueba_volumen(void) {
         cola_desencolar(cola);
         i++;
 	}
+    
     print_test("se pudieron desencolar todos los elementos", cola_esta_vacia(cola) == true);
 
 
