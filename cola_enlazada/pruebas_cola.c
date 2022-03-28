@@ -52,8 +52,8 @@ static void prueba_volumen(void) {
 
     //Encolar muchos elementos
     int elemento = 10000;
-
-   for (int i = 0; i <= elemento; i++) {
+    
+    for (int i = 0; i <= elemento; i++) {
 		cola_encolar(cola, &i);
 	}
     print_test("Se insertaron los elementos:", cola_esta_vacia(cola) == false);
