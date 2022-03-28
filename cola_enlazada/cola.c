@@ -83,9 +83,12 @@ void *cola_desencolar(cola_t *cola) {
 
 void cola_destruir(cola_t* cola, void destruir_dato(void*)){
 	while (cola_esta_vacia(cola) == false) {
-		cola_desencolar(cola);
-	}
-	
+		void* dato_destruir = cola_desencolar(cola);
+		
+		if (destruir_dato) {
+			destruir_dato(dato_destruir);
+			}
+	}	
 	free(cola);
 }
 	
