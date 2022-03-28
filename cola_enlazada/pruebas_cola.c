@@ -51,17 +51,17 @@ static void prueba_volumen(void) {
     cola_t* cola = cola_crear();
 
     //Encolar muchos elementos
-	int elemento = 10000;
+    int elemento = 10000;
 
    for (int i = 0; i <= elemento; i++) {
 		cola_encolar(cola, &i);
 	}
-    printf("Esta vacia: %d\n", cola_esta_vacia(cola));
+    print_test("Se insertaron los elementos:", cola_esta_vacia(cola) == false);
     for (int i = 0; i <= elemento; i++) {
         cola_desencolar(cola);
 		
 	}
-    printf("Esta vacia: %d\n", cola_esta_vacia(cola));
+    print_test("Cola está vacía:", cola_esta_vacia(cola) == true);
 
     printf("\n");
     cola_destruir(cola, NULL);
