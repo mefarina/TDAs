@@ -53,8 +53,9 @@ static void prueba_volumen(void) {
     //Encolar muchos elementos
     int i = 0;
     bool ok = true;
+    int elementos = 10000;
     
-    while (i < 5) {
+    while (i < elementos) {
         int num = 0;
         ok &= cola_encolar(cola, &num);
         num++;
@@ -64,15 +65,14 @@ static void prueba_volumen(void) {
     print_test("se pudieron encolar todos los elementos", ok == true);
 
     ok = true;
-    while (i < 10000) {
+    while (i < elementos) {
         cola_desencolar(cola);
         i++;
 	}
-    
+
     print_test("se pudieron desencolar todos los elementos", cola_esta_vacia(cola) == true);
-
-
     printf("\n");
+    
     cola_destruir(cola, free);
 }
 
