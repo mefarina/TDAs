@@ -64,7 +64,7 @@ static void prueba_volumen(void) {
     print_test("Cola está vacía:", cola_esta_vacia(cola) == true);
 
     printf("\n");
-    cola_destruir(cola, NULL);
+    cola_destruir(cola, free);
 }
 
 
