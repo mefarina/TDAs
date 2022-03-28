@@ -51,29 +51,20 @@ static void prueba_volumen(void) {
     cola_t* cola = cola_crear();
 
     //Encolar muchos elementos
-    int i = 0;
-    bool ok = true;
-    int elementos = 10000;
-    
-    while (i < elementos) {
-        int num = 0;
-        ok &= cola_encolar(cola, &num);
-        num++;
-        i++;
+	int elemento = 10000;
+
+   for (int i = 0; i <= elemento; i++) {
+		cola_encolar(cola, &i);
 	}
-
-    print_test("se pudieron encolar todos los elementos", ok == true);
-
-    ok = true;
-    while (i < elementos) {
+    printf("Esta vacia: %d\n", cola_esta_vacia(cola));
+    for (int i = 0; i <= elemento; i++) {
         cola_desencolar(cola);
-        i++;
+		
 	}
+    printf("Esta vacia: %d\n", cola_esta_vacia(cola));
 
-    print_test("se pudieron desencolar todos los elementos", cola_esta_vacia(cola) == true);
     printf("\n");
-    
-    cola_destruir(cola, free);
+    cola_destruir(cola, NULL);
 }
 
 
