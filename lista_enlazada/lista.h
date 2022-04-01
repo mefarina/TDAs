@@ -65,6 +65,10 @@ void *lista_ver_ultimo(const lista_t *lista);
 // contiene un elemento menos, si la lista no estaba vacía.
 void *lista_borrar_primero(lista_t *lista);
 
+// Obtiene el largo de la lista.
+// Pre: la lista fue creada.
+// Post: Se devolvió el lago de la lista.
+size_t lista_largo(const lista_t *lista);
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS

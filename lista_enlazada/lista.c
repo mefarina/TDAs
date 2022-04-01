@@ -67,17 +67,20 @@ void *lista_borrar_primero(lista_t *lista) {
 	nodo_t* nodo_actual = lista->primero;
 	void* dato_actual = lista->primero->dato;
 	lista->primero = lista->primero->prox;
-	
+	lista->largo--;
+
 	free(nodo_actual);
 	return dato_actual;
 }
 
+
 bool lista_insertar_ultimo(lista_t *lista, void *valor){
 	nodo_t* nodo = malloc(sizeof(nodo_t));
-
-	if (nodo == NULL) {
+	
+	if (nodo == NULL || lista_esta_vacia(lista)) {
 		return false;
 	}
+	
 	nodo->dato = valor;
 	lista->ultimo->prox = nodo;
 	lista->ultimo = nodo;
@@ -91,6 +94,16 @@ void *lista_ver_ultimo(const lista_t *lista) {
 	return lista->ultimo->dato;
 }
 
+
 size_t lista_largo(const lista_t *lista) {
 	return lista->largo;
+}
+
+
+void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
+	while (lista_esta_vacia(lista) == false) {
+		lista_borrar_primero(lista);
+		}
+	
+	free(lista);
 }
