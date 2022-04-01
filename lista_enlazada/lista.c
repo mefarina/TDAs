@@ -1,6 +1,7 @@
 #include "lista.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <stddef.h>
 
 typedef struct nodo nodo_t; 
 
@@ -106,4 +107,8 @@ void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
 		}
 	
 	free(lista);
+}
+
+int main() {
+	lista_t* lista = lista_crear();
 }
