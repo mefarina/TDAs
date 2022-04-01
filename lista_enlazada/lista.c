@@ -30,6 +30,7 @@ lista_t *lista_crear(void) {
     return lista;
 }
 
+
 bool lista_esta_vacia(const lista_t *lista) {
     return lista->largo == 0;
 }
@@ -109,6 +110,14 @@ void lista_destruir(lista_t *lista, void (*destruir_dato)(void *)) {
 	free(lista);
 }
 
-int main() {
-	lista_t* lista = lista_crear();
+
+void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra) {
+	nodo_t* nodo = lista ->primero;
+	while(nodo != NULL) {
+		if (lista_esta_vacia(lista) == false) {
+			void* dato = nodo->dato;
+			visitar(dato, extra);
+			nodo = nodo->prox;		
+		}
+	}
 }
