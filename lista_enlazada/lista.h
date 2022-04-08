@@ -5,6 +5,7 @@
 #include <stddef.h>
 
 
+
 /* ******************************************************************
  *                DEFINICION DE LOS TIPOS DE DATOS
  * *****************************************************************/
@@ -13,6 +14,9 @@
 
 struct lista;
 typedef struct lista lista_t;
+
+struct lista_iter;
+typedef struct lista_iter lista_iter_t;
 
 
 /* ******************************************************************
@@ -70,6 +74,19 @@ void *lista_borrar_primero(lista_t *lista);
 // Pre: la lista fue creada.
 // Post: Se devolvió el lago de la lista.
 size_t lista_largo(const lista_t *lista);
+
+void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *extra);
+
+/* -----------Primitivas del iterador externo----------- */
+
+lista_iter_t *lista_iter_crear(lista_t *lista);
+
+void *lista_iter_ver_actual(const lista_iter_t *iter);
+
+bool lista_iter_avanzar(lista_iter_t *iter);
+
+bool lista_iter_insertar(lista_iter_t *iter, void *dato);
+
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS

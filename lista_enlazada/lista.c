@@ -16,6 +16,12 @@ struct lista {
     size_t largo;
 };
 
+struct lista_iter {
+	nodo_t* actual;
+	nodo_t* anterior;
+	lista_t* lista;
+};
+
 lista_t *lista_crear(void) {
     lista_t* lista = malloc(sizeof(lista_t));
 
@@ -121,3 +127,68 @@ void lista_iterar(lista_t *lista, bool visitar(void *dato, void *extra), void *e
 		}
 	}
 }
+
+
+/* ---------------Iterador externo-------------- */ 
+
+
+lista_iter_t *lista_iter_crear(lista_t *lista) {
+	lista_iter_t* iter = malloc(sizeof(lista_iter_t));
+
+    if (iter == NULL) {
+        return NULL;
+    }
+
+	iter->actual = lista->primero;
+	iter->anterior = NULL;
+	iter->lista = lista;
+
+	return iter;
+}
+
+
+void *lista_iter_ver_actual(const lista_iter_t *iter) {
+	if (iter->actual == NULL) {
+		return NULL;
+	}	
+	return iter->actual->dato;
+}
+
+bool lista_iter_avanzar(lista_iter_t *iter) {
+	if (iter->actual == NULL) {
+		return false;
+	}	
+	
+	iter->anterior = iter->actual;
+	iter->actual = iter->actual->prox;
+
+	return true;
+}
+
+bool lista_iter_al_final(const lista_iter_t *iter) {
+	if (iter->actual == NULL) {
+		return true;
+	}
+
+	return false;
+}
+
+bool lista_iter_insertar(lista_iter_t *iter, void *valor) {
+	nodo_t* nodo_nuevo = malloc(sizeof(nodo_t));
+
+    if (nodo_nuevo == NULL) {
+        return false;
+    }
+
+	nodo_nuevo->dato = valor;
+	iter->anterior->prox = nodo_nuevo;
+
+	nodo_nuevo->prox = iter->actual;
+	iter->actual = nodo_nuevo;
+	
+	iter->lista->largo++;	
+
+	return true;
+}
+
+
