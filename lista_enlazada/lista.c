@@ -207,14 +207,62 @@ void *lista_iter_borrar(lista_iter_t *iter) {
 		return NULL;
 	}
 
+	
 	nodo_t* nodo_a_eliminar = iter->actual;
 	void* dato_a_eliminar = nodo_a_eliminar->dato;
+	
+	if (iter->anterior != NULL) {
+		iter->anterior->prox = nodo_a_eliminar->prox;
+	}	
+	
 	iter->actual = nodo_a_eliminar->prox;
-	iter->lista->primero = iter->actual;
+
+	if (iter->lista->primero) {
+		iter->lista->primero = iter->actual;
+	}	
+
+	if (iter->lista->ultimo) {
+		iter->lista->ultimo = iter->actual;
+	}	
+
+	iter->lista->largo--;
 
 	free(nodo_a_eliminar);
 	return dato_a_eliminar;
 }
 
 
+void lista_iter_destruir(lista_iter_t *iter) {
+	free(iter);
+}
 
+int main(void) {
+	lista_t* lista = lista_crear();
+
+	lista_insertar_primero(lista, "popito");
+	lista_insertar_primero(lista, "momito");
+	lista_insertar_primero(lista, "chismosito");
+
+	lista_iter_t* iter = lista_iter_crear(lista);	
+
+	char* iter_valor2 = lista_iter_ver_actual(iter);
+	printf("Iter actual es chismosito: %s\n", iter_valor2);
+
+	char* valor = lista_ver_primero(lista);
+	printf("priemro es %s\n", valor);
+
+	lista_iter_borrar(iter);
+	lista_iter_borrar(iter);
+
+	char* iter_valor3 = lista_iter_ver_actual(iter);
+	printf("Iter actual es chismosito: %s\n", iter_valor3);
+
+	char* valor2 = lista_ver_primero(lista);
+	printf("priemro es %s\n", valor2);
+
+	lista_iter_destruir(iter);
+	lista_destruir(lista, NULL);
+	
+	
+
+}
