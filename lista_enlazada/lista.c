@@ -55,6 +55,7 @@ bool lista_insertar_primero(lista_t *lista, void *valor) {
 	if (lista_esta_vacia(lista) == true) {
 		lista->ultimo = nodo;
 	}
+
 	lista->primero = nodo;
 	lista->largo++;
 
@@ -140,6 +141,8 @@ lista_iter_t *lista_iter_crear(lista_t *lista) {
     }
 
 	iter->actual = lista->primero;
+	if (iter->actual == NULL) printf("iter->actual ta nulo\n");
+	if (lista->primero == NULL) printf("lista->primero ta nulo\n");
 	iter->anterior = NULL;
 	iter->lista = lista;
 
@@ -176,13 +179,20 @@ bool lista_iter_al_final(const lista_iter_t *iter) {
 bool lista_iter_insertar(lista_iter_t *iter, void *valor) {
 	nodo_t* nodo_nuevo = malloc(sizeof(nodo_t));
 
-    if (nodo_nuevo == NULL) {
+    if (nodo_nuevo == NULL || lista_esta_vacia(iter->lista) == true) {
         return false;
     }
 
-	nodo_nuevo->dato = valor;
-	iter->anterior->prox = nodo_nuevo;
+	if (iter->lista->primero) {
+		iter->anterior = nodo_nuevo;
+	} 
 
+	if (lista_iter_al_final(iter)) {
+		iter->lista->ultimo = nodo_nuevo;
+	}
+	
+	nodo_nuevo->dato = valor;	
+	iter->anterior->prox = nodo_nuevo;
 	nodo_nuevo->prox = iter->actual;
 	iter->actual = nodo_nuevo;
 	
@@ -190,5 +200,21 @@ bool lista_iter_insertar(lista_iter_t *iter, void *valor) {
 
 	return true;
 }
+
+
+void *lista_iter_borrar(lista_iter_t *iter) {
+	if (lista_esta_vacia(iter->lista)) {
+		return NULL;
+	}
+
+	nodo_t* nodo_a_eliminar = iter->actual;
+	void* dato_a_eliminar = nodo_a_eliminar->dato;
+	iter->actual = nodo_a_eliminar->prox;
+	iter->lista->primero = iter->actual;
+
+	free(nodo_a_eliminar);
+	return dato_a_eliminar;
+}
+
 
 

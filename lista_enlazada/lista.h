@@ -87,6 +87,8 @@ bool lista_iter_avanzar(lista_iter_t *iter);
 
 bool lista_iter_insertar(lista_iter_t *iter, void *dato);
 
+void *lista_iter_borrar(lista_iter_t *iter);
+
 
 /* *****************************************************************
  *                      PRUEBAS UNITARIAS
