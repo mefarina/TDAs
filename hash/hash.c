@@ -2,11 +2,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct hash_campo hash_campo_t;
+typedef struct hash_tabla hash_tabla_t;
 typedef enum estado {vacio, ocupado, borrado } estado_t;
 
-struct hash_campo {
-    char* clave;
+struct hash_tabla {
+    const char* clave;
     void* dato;
 	estado_t estado;
 };
@@ -14,11 +14,11 @@ struct hash_campo {
 struct hash {
     size_t cantidad_elementos;
     size_t capacidad;
-    hash_campo_t* campo;
+    hash_tabla_t* tabla;
 };
 
 /* http://www.cse.yorku.ca/~oz/hash.html */
-unsigned long hash(unsigned char *str) {
+unsigned long hash_f(const char *str) {
 	unsigned long hash = 5381;
 	int c;
 
@@ -39,22 +39,31 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 	hash->capacidad = 10;
 	hash->cantidad_elementos = 0;
 
-	hash->campo = malloc(sizeof(hash_campo_t*) * hash->capacidad);
+	hash->tabla = malloc(sizeof(hash_tabla_t*) * hash->capacidad);
 
-	if ( hash->campo == NULL) {
+	if ( hash->tabla == NULL) {
 		free(hash);
 		return NULL;
 	}
 
 	for(size_t i = 0; i < hash->capacidad; i++) {
-		hash->campo[i].clave = NULL;
-		hash->campo[i].dato = NULL;
-		hash->campo[i].estado = vacio;
+		hash->tabla[i].dato = NULL;
+		hash->tabla[i].estado = vacio;
 	}
 
 	return hash;
 }
 
-int main() {
-	hash_t* hash = hash_crear(NULL);
+
+bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
+	int posicion = hash_f(clave) %  hash->capacidad;
+
+	hash->tabla[posicion].clave = clave;
+	hash->tabla[posicion].dato = dato;
+	hash->tabla[posicion].estado = ocupado;
+	
+	hash->cantidad_elementos++;
+
+	return true;
 }
+
