@@ -18,12 +18,12 @@ struct hash {
 };
 
 /* http://www.cse.yorku.ca/~oz/hash.html */
-unsigned long hash_f(const char *str) {
-	unsigned long hash = 5381;
+size_t hash_f(const char *str) {
+	size_t hash = 5381;
 	int c;
 
-	while (c = *str++)
-		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+	while ((c = *str++))
+		hash = ((hash << 5) + hash) + (size_t)c; /* hash * 33 + c */
 
 	return hash;
 }
@@ -39,7 +39,7 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 	hash->capacidad = 10;
 	hash->cantidad_elementos = 0;
 
-	hash->tabla = malloc(sizeof(hash_tabla_t*) * hash->capacidad);
+	hash->tabla = malloc((hash->capacidad) * sizeof(hash_tabla_t));
 
 	if ( hash->tabla == NULL) {
 		free(hash);
@@ -56,7 +56,7 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 
 
 bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
-	int posicion = hash_f(clave) %  hash->capacidad;
+	size_t posicion = hash_f(clave) % hash->capacidad;
 
 	hash->tabla[posicion].clave = clave;
 	hash->tabla[posicion].dato = dato;
@@ -65,5 +65,19 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
 	hash->cantidad_elementos++;
 
 	return true;
+}
+
+
+void *hash_obtener(const hash_t *hash, const char *clave) {
+	size_t posicion = hash_f(clave) % hash->capacidad;
+
+	return hash->tabla[posicion].dato;
+}
+
+
+bool hash_pertenece(const hash_t *hash, const char *clave) {
+	size_t posicion = hash_f(clave) % hash->capacidad;
+	if (hash->tabla[posicion].clave == clave) return true;
+	return false;
 }
 
