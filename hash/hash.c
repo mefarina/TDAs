@@ -81,3 +81,37 @@ bool hash_pertenece(const hash_t *hash, const char *clave) {
 	return false;
 }
 
+
+size_t hash_cantidad(const hash_t *hash) {
+	return hash->cantidad_elementos;
+}
+
+
+int main() {
+	hash_t* hash = hash_crear(NULL);
+	char *clave1 = "momito";
+	char *valor1 = "uou";
+
+	char *clave2 = "popito";
+	char *valor2 = "miau";
+
+	hash_guardar(hash, clave1, valor1);
+	//hash_guardar(hash, clave2, valor2);
+
+	void* dato_momito = hash_obtener(hash, clave1);
+	printf("El dato de Momito es %s \n", (char*)dato_momito);
+
+	bool esta_momito = hash_pertenece(hash, clave1);
+	printf("Momito esta? %d \n", esta_momito);
+
+	bool esta_popito = hash_pertenece(hash, clave2);
+	printf("Popito esta? %d \n", esta_popito);
+
+	hash_guardar(hash, clave2, valor2);
+	void* dato_popito = hash_obtener(hash, clave2);
+	printf("El dato de Popito es %s \n", (char*)dato_popito);
+
+	size_t cantidad = hash_cantidad(hash);
+	printf("La cantidad de elementos es %ld", cantidad);
+
+}
