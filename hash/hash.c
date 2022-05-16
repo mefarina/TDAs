@@ -1,12 +1,15 @@
 #include "hash.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stddef.h>
 
 typedef struct hash_tabla hash_tabla_t;
 typedef enum estado {vacio, ocupado, borrado } estado_t;
 
 struct hash_tabla {
-    const char* clave;
+    char* clave;
     void* dato;
 	estado_t estado;
 };
@@ -18,12 +21,14 @@ struct hash {
 };
 
 /* http://www.cse.yorku.ca/~oz/hash.html */
-size_t hash_f(const char *str) {
-	size_t hash = 5381;
+static unsigned long hash_f(const char* clave) {
+
+	unsigned long hash = 0;
 	int c;
 
-	while ((c = *str++))
-		hash = ((hash << 5) + hash) + (size_t)c; /* hash * 33 + c */
+	while ((c = *clave++)) {
+		hash = c + (hash << 6) + (hash << 16) - hash;
+	}
 
 	return hash;
 }
@@ -47,6 +52,7 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 	}
 
 	for(size_t i = 0; i < hash->capacidad; i++) {
+		hash->tabla[i].clave = NULL;
 		hash->tabla[i].dato = NULL;
 		hash->tabla[i].estado = vacio;
 	}
@@ -58,7 +64,7 @@ hash_t *hash_crear(hash_destruir_dato_t destruir_dato) {
 bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
 	size_t posicion = hash_f(clave) % hash->capacidad;
 
-	hash->tabla[posicion].clave = clave;
+	hash->tabla[posicion].clave = strdup(clave);
 	hash->tabla[posicion].dato = dato;
 	hash->tabla[posicion].estado = ocupado;
 	
@@ -70,6 +76,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato) {
 
 void *hash_obtener(const hash_t *hash, const char *clave) {
 	size_t posicion = hash_f(clave) % hash->capacidad;
+	printf("la posicion es %lu", posicion);
 
 	return hash->tabla[posicion].dato;
 }
@@ -77,12 +84,31 @@ void *hash_obtener(const hash_t *hash, const char *clave) {
 
 bool hash_pertenece(const hash_t *hash, const char *clave) {
 	size_t posicion = hash_f(clave) % hash->capacidad;
-	if (hash->tabla[posicion].clave == clave) return true;
-	return false;
+	if (!hash->tabla[posicion].clave) {
+		return false;
+	}
+	return true;
 }
 
 
 size_t hash_cantidad(const hash_t *hash) {
 	return hash->cantidad_elementos;
+}
+
+
+void *hash_borrar(hash_t *hash, const char *clave) {
+	size_t posicion = hash_f(clave) % hash->capacidad;
+	if (!hash_pertenece) {
+		return NULL;
+	}
+	
+	void* elemento_a_borrar = hash->tabla[posicion].dato;
+
+	hash->tabla[posicion].estado = borrado;
+	hash->cantidad_elementos--;
+	free(hash->tabla[posicion].clave); 
+		
+	
+	return elemento_a_borrar;
 }
 
